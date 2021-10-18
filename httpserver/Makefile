@@ -1,4 +1,4 @@
-export tag=v1.0
+export tag=1.0.0
 root:
 	export ROOT=github.com/vince002/golang
 
@@ -9,8 +9,12 @@ build:
 
 release: build
 	echo "building httpserver container"
-	docker build -t cncamp/httpserver:${tag} .
+	docker build -t vinceleung/httpserver:${tag} .
 
 push: release
-	echo "pushing cncamp/httpserver"
-	docker push cncamp/httpserver:v1.0
+	echo "pushing vinceleung/httpserver"
+	docker push vinceleung/httpserver:${tag}
+pull:
+	sudo docker pull vinceleung/httpserver:${tag}
+run:
+	sudo docker run vinceleung/httpserver:${tag}
