@@ -19,12 +19,14 @@ https://hub.docker.com/repository/docker/vinceleung/httpserver
 docker run -p 8081:80 vinceleung/httpserver:1.0.0
 
 4、通过 nsenter 进入容器查看 IP 配置
+
 查看容器ID 
 docker ps 
+
 查看该容器的 Pid
 docker inspect -f {{.State.Pid}} 8b00567c0ed0
-nsenter 命令进入该容器的网络命令空间
 
+nsenter 命令进入该容器的网络命令空间
 nsenter -n -t 3786
 
 
