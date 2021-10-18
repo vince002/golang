@@ -34,6 +34,8 @@ nsenter 命令进入该容器的网络命令空间
 
 nsenter -n -t 3786
 
+ip addr
+
 
 
 
