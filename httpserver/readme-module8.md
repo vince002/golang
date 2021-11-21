@@ -36,11 +36,26 @@ make push
 sudo docker login hub.docker.com --username vinceleung --password ***
 sudo docker pull vinceleung/httpserver:1.0.1
 ```
+访问不到hub.docker.com,通过离线包防止导入镜像到虚拟机
+```
+docker save vinceleung/httpserver:1.0.1  -o httpserver101.zip
+
+sudo docker load -i httpserver101.zip
+```
 #### 3、执行创建Pod
 上传httpserver.yaml 文件到虚拟机/opt/app目录
 执行以下命令创建Pod
 ```
 kubectl create -f httpserver.yaml
+```
+
+#### 4、查询服务状态以及访问
+```
+k describe po  httpserver
+
+curl 192.168.119.123/healthz
+
+curl 192.168.119.123/?user=vince
 ```
 
 
