@@ -36,6 +36,9 @@ nsenter -n -t 3786
 
 ip addr
 
+5、TODO 
+dockerfile最佳实践 
+
 
 
 

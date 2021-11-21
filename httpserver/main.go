@@ -1,25 +1,60 @@
 package main
 
 import (
+	"context"
 	"errors"
+	"flag"
 	"fmt"
+	"github.com/golang/glog"
 	"io"
 	"log"
 	"net"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
+	"time"
 )
 
 func main() {
+	v := os.Getenv("v")
+	flag.Set("v", v)
+	flag.Parse()
+	glog.V(2).Info("Starting http server v=2...")
+
+	glog.V(4).Info("Starting http server v=4...")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/healthz", healthz)
-	err := http.ListenAndServe(":80", mux)
-	if err != nil {
-		log.Fatal(err)
+
+	srv := http.Server{
+		Addr:    ":80",
+		Handler: mux,
 	}
+	// 优雅终止，1分钟后执行kill
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	go func() {
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s\n", err)
+		}
+	}()
+	log.Print("Server Started")
+	<-done
+	log.Print("Server Stopped")
+	ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	defer func() {
+		// extra handling here
+		cancel()
+	}()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+	log.Print("Server Exited Properly")
 
 }
 
@@ -29,9 +64,25 @@ func healthz(w http.ResponseWriter, r *http.Request) {
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
+
+
 	fmt.Println("entering root handler")
+
+	glog.V(2).Info("entering root handler v=2...")
+
+	glog.V(4).Info("entering root handler v=4...")
+
 	version := os.Getenv("VERSION")
 	w.Header().Set("Version", version)
+
+	user := r.URL.Query().Get("user")
+	if user != "" {
+		io.WriteString(w, fmt.Sprintf("hello [%s]\n", user))
+	} else {
+		io.WriteString(w, "hello [stranger]\n")
+	}
+
+
 	for k, v := range r.Header {
 		for _, value := range v {
 			w.Header().Add(string(k), string(value))
