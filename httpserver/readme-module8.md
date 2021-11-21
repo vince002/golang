@@ -36,7 +36,7 @@ make push
 sudo docker login hub.docker.com --username vinceleung --password ***
 sudo docker pull vinceleung/httpserver:1.0.1
 ```
-访问不到hub.docker.com,通过离线包防止导入镜像到虚拟机
+访问不到hub.docker.com,通过离线包方式导入镜像到虚拟机
 ```
 docker save vinceleung/httpserver:1.0.1  -o httpserver101.zip
 
