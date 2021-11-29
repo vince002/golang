@@ -1,4 +1,4 @@
-export tag=1.0.1
+export tag=1.0.2
 root:
 	export ROOT=github.com/vince002/golang
 

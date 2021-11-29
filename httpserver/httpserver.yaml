@@ -6,7 +6,7 @@ spec:
   terminationGracePeriodSeconds: 60
   containers:
     - name: httpserver
-      image: vinceleung/httpserver:1.0.1
+      image: vinceleung/httpserver:1.0.2
       #QoS Class: Burstable
       resources:
         limits:

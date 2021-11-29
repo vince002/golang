@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpserver-gateway
+  annotations:
+    kubernetes.io/ingress.class: "httpserver"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+
+  tls:
+    - hosts:
+        - vinceleung.com
+      secretName: vinceleung-tls
+  rules:
+    - host: vinceleung.com
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: httpserver
+                port:
+                  number: 80
