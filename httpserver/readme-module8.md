@@ -68,13 +68,9 @@ curl 192.168.119.123/?user=vince
 
 # 第二部分： 如何将服务发布给对内和对外的调用方。
 用 Service, Ingress 将的服务发布给集群外部的调用方
-
-Service
-Ingress
-
 ### 可以考虑的细节：
 如何确保整个应用的高可用 </br>
-如何通过证书保证 httpServer 的通讯安全 TODO
+如何通过证书保证 httpServer 的通讯安全
 
 ## 创建httpserver-deploy
 ```
