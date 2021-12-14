@@ -40,8 +40,8 @@ helm pull grafana/loki-stack
 tar -xvf loki-stack-2.4.1.tgz
 cd loki-stack
 ```
-下载安装包失败，gibhub访问不到
-虚拟机网络不通，在mac 
+下载安装包失败，虚拟机github访问不到
+在mac下载、解压、替换文件内容复制到虚拟机
 
 [loki-stack2.4.1下载地址](https://objects.githubusercontent.com/github-production-release-asset-2e65be/289034413/22b0f100-b6fb-11eb-9e92-293091ef64e0?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20211213%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211213T095207Z&X-Amz-Expires=300&X-Amz-Signature=)
 
