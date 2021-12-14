@@ -6,8 +6,11 @@ import (
 	"flag"
 	"fmt"
 	"github.com/golang/glog"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/vince002/golang/httpserver/metrics"
 	"io"
 	"log"
+	"math/rand"
 	"net"
 	"net/http"
 	_ "net/http/pprof"
@@ -25,9 +28,16 @@ func main() {
 	glog.V(2).Info("Starting http server v=2...")
 
 	glog.V(4).Info("Starting http server v=4...")
+
+	//module10: 1、注册metrics指标
+	metrics.Register()
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", rootHandler)
 	mux.HandleFunc("/healthz", healthz)
+
+	//module10: 1、指定Handler
+	mux.Handle("/metrics", promhttp.Handler())
 
 	srv := http.Server{
 		Addr:    ":80",
@@ -72,10 +82,21 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	glog.V(4).Info("entering root handler v=4...")
 
+
 	version := os.Getenv("VERSION")
 	w.Header().Set("Version", version)
 
+	//module10：2、输出指标
+	timer := metrics.NewTimer()
+	defer timer.ObserveTotal()
+
 	user := r.URL.Query().Get("user")
+
+	//module10:1、为 HTTPServer 添加 0-2 秒的随机延时
+	delay := randInt(10,2000)
+	time.Sleep(time.Millisecond*time.Duration(delay))
+
+
 	if user != "" {
 		io.WriteString(w, fmt.Sprintf("hello [%s]\n", user))
 	} else {
@@ -100,6 +121,9 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(status)
 
 	fmt.Println("http.Status =", status)
+	fmt.Println("delay =", delay)
+	glog.V(4).Infof("Respond in %d ms, v=4...", delay)
+
 }
 
 // GetIP returns request real ip.
@@ -129,5 +153,10 @@ func GetIP(r *http.Request) (string, error) {
 	}
 
 	return "", errors.New("no valid ip found")
+}
+
+func randInt(min int, max int) int {
+	rand.Seed(time.Now().UTC().UnixNano())
+	return min + rand.Intn(max-min)
 }
 

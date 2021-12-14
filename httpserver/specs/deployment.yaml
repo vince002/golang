@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpserver
+  template:
+    metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        #注意，需要指定端口，指定端口名字或者端口号
+        prometheus.io/port: "80"
+      labels:
+        app: httpserver
+    spec:
+      containers:
+        - name: httpserver
+          imagePullPolicy: Always
+          image: vinceleung/httpserver:1.0.2-metrics
+          ports:
+            - containerPort: 80
