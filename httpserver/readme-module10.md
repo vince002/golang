@@ -1,8 +1,6 @@
 
 
 # 模块十
-
-## 思考的维度
 ### 1、为 HTTPServer 添加 0-2 秒的随机延时
 ```
 main.go rootHandler 
@@ -121,7 +119,7 @@ admin zYbeKgVB4yWJWGdsXfeoutiLxeV1XDzM5jUtNTOw
 ```
 curl 192.168.119.99
 ```
-General /Home 界面 Dashboards 面板点击http-server-latency预览数据
+General/Home 界面 Dashboards 面板点击http-server-latency预览数据
 
 [Dashboard http-server-latency](http://192.168.34.2:31214/d/mWgwgx5nz/http-server-latency?orgId=1)
 
