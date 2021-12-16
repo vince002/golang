@@ -63,17 +63,17 @@ helm pull grafana/loki-stack
 tar -xvf loki-stack-2.4.1.tgz
 cd loki-stack
 ```
-下载安装包失败，虚拟机github访问不到
-在mac下载、解压、替换文件内容复制到虚拟机
-
+helm pull 提示下载安装包失败 
+原因：虚拟机访问不到github
+解决办法：在Mac下载、解压、替换文件内容复制到虚拟机
 [loki-stack2.4.1下载地址](https://objects.githubusercontent.com/github-production-release-asset-2e65be/289034413/22b0f100-b6fb-11eb-9e92-293091ef64e0?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20211213%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20211213T095207Z&X-Amz-Expires=300&X-Amz-Signature=)
 
-用Visual Studio Code替换版本
+由于kubernetes与loki-stack版本问题，在Mac用Visual Studio Code替换API版本
 ```
 replace all `rbac.authorization.k8s.io/v1beta1` with `rbac.authorization.k8s.io/v1`
 ```
 
-复制虚拟机器文件夹loki-stack
+复制loki-stack文件夹到虚拟机器的helm/repository目录
 ```
 mv /opt/app/101/loki-stack /home/cadmin/.cache/helm/repository/loki-stack
 ```
@@ -120,6 +120,7 @@ admin zYbeKgVB4yWJWGdsXfeoutiLxeV1XDzM5jUtNTOw
 curl 192.168.119.99
 ```
 General /Home 界面 Dashboards 面板点击http-server-latency预览数据
+[Dashboard http-server-latency](http://192.168.34.2:31214/d/mWgwgx5nz/http-server-latency?orgId=1)
 
 根据prometheus的config配置同步指标到grafana
 
