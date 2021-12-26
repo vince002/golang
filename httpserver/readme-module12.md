@@ -52,4 +52,50 @@ curl --resolve httpsserver.vinceleung.io:443:10.99.239.22 https://httpsserver.vi
 
 ### 3、open tracing 的接入
 
-应用层面处理header
+应用层面处理header传递问题main.go
+
+```
+req, err := http.NewRequest("GET", "http://service1", nil)
+if err != nil {
+    fmt.Printf("%s", err)
+}
+lowerCaseHeader := make(http.Header)
+for key, value := range r.Header {
+    lowerCaseHeader[strings.ToLower(key)] = value
+}
+glog.Info("headers:", lowerCaseHeader)
+req.Header = lowerCaseHeader
+```
+
+```
+kubectl apply -f jaeger.yaml
+kubectl edit configmap istio -n istio-system
+set tracing.sampling=100
+```
+
+
+#### deploy tracing
+```
+kubectl apply ns httpserver-istio
+kubectl label ns httpserver-istio istio-injection=enabled
+kubectl -n httpserver-istio apply -f httpserver.yaml
+kubectl -n httpserver-istio apply -f service1.yaml
+kubectl -n httpserver-istio apply -f service2.yaml
+kubectl apply -f istio-specs.yaml -n httpserver-istio
+```
+#### check ingress ip
+```
+k get svc -nistio-system
+istio-ingressgateway   LoadBalancer   $INGRESS_IP
+```
+#### access the tracing via ingress for 100 times(sampling rate is 1%)
+```
+
+curl --resolve httpsserver.vinceleung.io:443:10.99.239.22 https://httpsserver.vinceleung.io/vinceleng?user=testI7MathchByVinceLeung -v -k
+
+```
+#### check tracing dashboard
+
+```
+istioctl dashboard jaeger
+```
