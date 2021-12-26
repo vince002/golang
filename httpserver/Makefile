@@ -1,4 +1,4 @@
-export tag=1.0.2-metrics
+export tag=1.0.3-tracing
 root:
 	export ROOT=github.com/vince002/golang
 

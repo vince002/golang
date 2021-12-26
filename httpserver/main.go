@@ -96,6 +96,17 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	delay := randInt(10,2000)
 	time.Sleep(time.Millisecond*time.Duration(delay))
 
+	req, err := http.NewRequest("GET", "http://service1", nil)
+	if err != nil {
+		fmt.Printf("%s", err)
+	}
+	lowerCaseHeader := make(http.Header)
+	for key, value := range r.Header {
+		lowerCaseHeader[strings.ToLower(key)] = value
+	}
+	glog.Info("headers:", lowerCaseHeader)
+	req.Header = lowerCaseHeader
+
 
 	if user != "" {
 		io.WriteString(w, fmt.Sprintf("hello [%s]\n", user))
