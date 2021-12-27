@@ -18,7 +18,7 @@ spec:
       containers:
         - name: httpserver
           imagePullPolicy: Always
-          image: vinceleung/httpserver:1.0.3-tracing
+          image: vinceleung/httpserver:1.0.4-tracing
           ports:
             - containerPort: 80
 ---

@@ -94,6 +94,9 @@ istio-ingressgateway   LoadBalancer   $INGRESS_IP
 #### access the tracing via ingress for 100 times(sampling rate is 100%)
 ```
 
+ for i in `seq 1 100`; do curl -s -o /dev/null --resolve httpsserver.vinceleung.io:443:10.99.239.22 https://httpsserver.vinceleung.io/vinceleng?user=testI7MathchByVinceLeung -v -k
+; done
+
 curl --resolve httpsserver.vinceleung.io:443:10.99.239.22 https://httpsserver.vinceleung.io/vinceleng?user=testI7MathchByVinceLeung -v -k
 
 ```
@@ -102,3 +105,43 @@ curl --resolve httpsserver.vinceleung.io:443:10.99.239.22 https://httpsserver.vi
 ```
 istioctl dashboard jaeger
 ```
+
+update tracing svc type:NodePort
+```
+k get svc -n istio-system
+k edit svc tracing -n istio-system
+k get svc -n httpserver-istio
+```
+```
+k get svc -n httpserver-istio
+```
+```
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)                                                                      AGE
+istio-egressgateway    ClusterIP      10.96.133.190    <none>        80/TCP,443/TCP                                                               5d23h
+istio-ingressgateway   LoadBalancer   10.99.239.22     <pending>     15021:31527/TCP,80:30214/TCP,443:32739/TCP,31400:32333/TCP,15443:30035/TCP   5d23h
+istiod                 ClusterIP      10.100.95.126    <none>        15010/TCP,15012/TCP,443/TCP,15014/TCP                                        5d23h
+jaeger-collector       ClusterIP      10.102.235.222   <none>        14268/TCP,14250/TCP,9411/TCP                                                 3d6h
+tracing                NodePort       10.101.15.51     <none>        80:31001/TCP,16685:32201/TCP                                                 3d6h
+zipkin                 ClusterIP      10.104.33.154    <none>        9411/TCP
+```
+access tracing dashboard
+```
+http://192.168.34.2:tracingNodePort/
+
+http://192.168.34.2:31001/
+```
+search
+
+![alt jaeger search](images/tracing/jaeger_search.png)
+
+trace
+![alt jaeger search](images/tracing/jaeger_trace.png)
+
+httpserver response
+![alt httpserver response](images/tracing/httpserver-response.png)
+
+service1 log
+![alt service1 log](images/tracing/service1log.png)
+
+service2 log
+![alt service2 log](images/tracing/service2log.png)

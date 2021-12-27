@@ -107,6 +107,17 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	glog.Info("headers:", lowerCaseHeader)
 	req.Header = lowerCaseHeader
 
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		glog.Info("HTTP get failed with error: ", "error", err)
+	} else {
+		glog.Info("HTTP get succeeded, http://service1")
+	}
+	if resp != nil {
+		resp.Write(w)
+	}
+
 
 	if user != "" {
 		io.WriteString(w, fmt.Sprintf("hello [%s]\n", user))
